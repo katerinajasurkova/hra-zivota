@@ -35,7 +35,7 @@ function initializeGrids() {
 
 // lay out the board
 function createTable() {
-    let gridContainer = document.querySelector("gridContainer");
+    let gridContainer = document.querySelector("#gridContainer");
     if (!gridContainer) {
         // throw error
         console.error("Problem: no div for the grid table!");
@@ -91,6 +91,7 @@ function setupControlButtons() {
 
     clearButton.onclick = () => {
         playing = false;
+        console.log('kliknul si na clear')
         startButton.innerHTML = "start";
         resetGrids();
         updateView();
