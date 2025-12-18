@@ -3,7 +3,7 @@ let cols = 15;
 let playing = false;
 
 let timer;
-let reproductionTime = 500;
+let reproductionTime = 1000;
 
 let grid = new Array(rows);
 let nextGrid = new Array(rows);
@@ -106,6 +106,9 @@ function setupControlButtons() {
                 else cell.setAttribute('class', 'dead');
             }
         }
+    }
+    countButton.onclick = () => {
+        
     }
 
 }
