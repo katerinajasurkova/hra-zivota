@@ -14,7 +14,26 @@
       <button id="clear">clear</button>
       <button id="random">random</button>
     </div>
+    
+    <div class="settings">
+  <label>
+    Rychlost (ms):
+    <input type="range" id="speed" min="100" max="2000" step="100" value="1000">
+  </label>
 
-  
+  <label>
+    Velikost pole:
+    <input type="number" id="size" min="5" max="50" value="15">
+    <button id="resize">změnit</button>
+  </label>
+
+  <label>
+    Pravidla (např. B3/S23):
+    <input type="text" id="rules" value="B3/S23">
+  </label>
+
+  <div id="counter">Živé buňky: 0</div>
+</div>
+
   </body>
 </html>

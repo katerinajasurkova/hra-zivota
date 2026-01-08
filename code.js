@@ -8,6 +8,8 @@ let reproductionTime = 1000;
 let grid = new Array(rows);
 let nextGrid = new Array(rows);
 
+let birthRules = [3];
+let surviveRules = [2, 3];
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -75,6 +77,10 @@ function setupControlButtons() {
     let startButton = document.querySelector('#start');
     let clearButton = document.querySelector('#clear');
     let rButton = document.querySelector('#random');
+    let speedSlider = document.querySelector('#speed');
+    let sizeInput = document.querySelector('#size');
+    let resizeButton = document.querySelector('#resize');
+    let rulesInput = document.querySelector('#rules');
 
     startButton.onclick = () => {
         if (playing) {
@@ -107,9 +113,38 @@ function setupControlButtons() {
             }
         }
     }
-    countButton.onclick = () => {
-        
-    }
+  
+
+    speedSlider.oninput = () => {
+        reproductionTime = Number(speedSlider.value);
+    };
+
+   
+
+    resizeButton.onclick = () => {
+        playing = false;
+        clearTimeout(timer);
+
+        rows = Number(sizeInput.value);
+        cols = Number(sizeInput.value);
+
+        grid = new Array(rows);
+        nextGrid = new Array(rows);
+
+        document.querySelector('#gridContainer').innerHTML = '';
+
+        initializeGrids();
+        resetGrids();
+        createTable();
+        updateView();
+
+        startButton.innerHTML = 'start';
+    };
+    
+
+    rulesInput.onchange = () => {
+        parseRules(rulesInput.value);
+    };
 
 }
 
@@ -153,24 +188,24 @@ function updateView() {
             }
         }
     }
+    countLivingCells();
 }
+
 
 function applyRules(row, col) {
     let numNeighbors = countNeighbors(row, col);
 
     if (grid[row][col] == 1) {
-        if (numNeighbors < 2) {
-            nextGrid[row][col] = 0;
-        } else if (numNeighbors == 2 || numNeighbors == 3) {
-            nextGrid[row][col] = 1;
-        } else if (numNeighbors > 3) {
-            nextGrid[row][col] = 0;
-        }
-    } else if (grid[row][col] == 0) {
-        if (numNeighbors == 3) {
-            nextGrid[row][col] = 1;
-        }
+        nextGrid[row][col] = surviveRules.includes(numNeighbors) ? 1 : 0;
+    } else {
+        nextGrid[row][col] = birthRules.includes(numNeighbors) ? 1 : 0;
     }
+}
+
+function parseRules(ruleString) {
+    let parts = ruleString.toUpperCase().split('/');
+    birthRules = parts[0].replace('B', '').split('').map(Number);
+    surviveRules = parts[1].replace('S', '').split('').map(Number);
 }
 
 
@@ -202,4 +237,15 @@ function countNeighbors(row, col) {
         if (grid[row + 1][col + 1] == 1) count++;
     }
     return count;
+}
+
+function countLivingCells() {
+    let count = 0;
+    for (let i = 0; i < rows; i++) {
+        for (let j = 0; j < cols; j++) {
+            if (grid[i][j] === 1) count++;
+        }
+    }
+    document.querySelector('#counter').innerText =
+        'Živé buňky: ' + count;
 }
